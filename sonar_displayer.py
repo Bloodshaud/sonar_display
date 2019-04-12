@@ -54,7 +54,6 @@ class Radar:
         self.canvas.create_oval(300, 300, 300, 300, width=4, outline='green')
 
         if point is not None:
-            print("Drawing point " + str(point))
             x = point.x + 300
             y = 300 - point.y
             self.canvas.create_oval(x - 5, y - 5, x + 5, y + 5, width=1, fill='red')
@@ -68,11 +67,8 @@ class Radar:
             These lines are translated into x,y coordinates and drawn onto the canvas
         """
         while True:
-            print("Waiting for input")
             distance = int(self.serial.readline())
             angle = int(self.serial.readline())
-
-            print("Read distance=" + str(distance) + ", angle=" + str(angle))
 
             x = int(min(distance, 300) * math.cos(math.radians(angle)))
             y = int(distance * math.sin(math.radians(angle)))
