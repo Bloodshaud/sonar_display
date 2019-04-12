@@ -34,10 +34,11 @@ class Radar:
 
         root = tk.Tk()
         root.title('Radar')
-        canvas = tk.Canvas(root, width=600, height=600)
+        canvas = tk.Canvas(root, width=600, height=310)
         canvas.pack(expand=True, fill=tk.BOTH)
 
         self.canvas = canvas
+        self.draw(None)
         self.read_loop()
 
     def draw(self, point):
@@ -47,17 +48,27 @@ class Radar:
         :param point: point to draw
         """
         self.canvas.delete("all")
-
-        self.canvas.create_oval(0, 0, 600, 600, width=4, fill='darkgreen', outline='green')
-        self.canvas.create_oval(200, 200, 400, 400, width=1, outline='green')
-        self.canvas.create_oval(100, 100, 500, 500, width=1, outline='green')
-        self.canvas.create_oval(300, 300, 300, 300, width=4, outline='green')
+        self.draw_basis()
 
         if point is not None:
             x = point.x + 300
             y = 300 - point.y
             self.canvas.create_oval(x - 5, y - 5, x + 5, y + 5, width=1, fill='red')
         self.canvas.update()
+
+    def draw_basis(self):
+        """
+            Method for drawing background
+        """
+        self.canvas.create_oval(0, 0, 600, 600, width=4, fill='darkgreen', outline='green')
+        self.canvas.create_line(300, 300, 300, 0, width=1, fill='green')
+        self.canvas.create_line(300, 300, 600, 300, width=1, fill='green')
+        self.canvas.create_line(300, 300, 512, 88, width=1, fill='green')
+        self.canvas.create_line(300, 300, 88, 88, width=1, fill='green')
+        self.canvas.create_line(300, 300, 0, 300, width=1, fill='green')
+        self.canvas.create_oval(100, 100, 500, 500, width=1, outline='green')
+        self.canvas.create_oval(200, 200, 400, 400, width=1, outline='green')
+        self.canvas.create_oval(300, 300, 300, 300, width=4, outline='green')
 
     def read_loop(self):
         """
@@ -70,8 +81,8 @@ class Radar:
             distance = int(self.serial.readline())
             angle = int(self.serial.readline())
 
-            x = int(min(distance, 300) * math.cos(math.radians(angle)))
-            y = int(distance * math.sin(math.radians(angle)))
+            y = int(min(distance, 300) * math.cos(math.radians(angle)))
+            x = int(distance * math.sin(math.radians(angle)))
 
             self.draw(Point(x, y))
 
