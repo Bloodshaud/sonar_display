@@ -1,3 +1,4 @@
+import argparse
 import math
 import time
 import tkinter as tk
@@ -99,4 +100,12 @@ class Radar:
 
 
 if __name__ == "__main__":
-    radar = Radar("COM3", 9600, 5)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-port', dest="port", help="Port to read information from", default="COM3")
+    parser.add_argument('-baud', dest="baudrate", help="Baudrate to use when reading", type=int, default=9600)
+    parser.add_argument('-pointTime', dest="dot_lifetime", help="How long a point remains visible after detection",
+                        type=int, default=5)
+
+    args = parser.parse_args()
+
+    radar = Radar(args.port, args.baudrate, 5)
